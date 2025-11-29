@@ -1,0 +1,78 @@
+import java.util.ArrayList;
+
+public class Student
+{
+	private int ID;
+	private String name;
+	private ArrayList<Subject> subjects;
+	
+	public Student()
+	{
+		this.ID = 0;
+		this.name = "UNKNOWN";
+		subjects = new ArrayList<>();
+	}
+
+	public Student(int ID, String name)
+	{
+		this.ID = ID;
+		this.name = name;
+		subjects = new ArrayList<>();
+	}
+
+	public void setID(int ID)
+	{
+		this.ID = ID;
+	}
+
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
+	public void addSubject(Subject subject)
+	{
+		subjects.add(subject);
+	}
+
+	
+	public int getID()
+	{
+		return ID;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
+
+	public ArrayList<Subject> getSubjects()
+	{
+		return subjects;
+	}
+
+	public Subject getSubject(int index)
+	{
+		return subjects.get(index);
+	}
+
+	public int getSubjectCount()
+	{
+		return subjects.size();
+	}
+
+		
+	@Override
+	public String toString()
+	{
+		String output = "ID: " + ID + "\nName: " + name;
+		output += "\nSubjects:\n";
+
+		for (Subject s : subjects)
+		{
+			output += "Subject: " + s.toString() + "\n";
+		}
+
+		return output;	
+	}
+}
