@@ -1,0 +1,359 @@
+import java.util.Scanner;
+import java.util.InputMismatchException;
+
+public class StudentManagementSystem
+{
+	public static void main(String [] args)
+	{
+
+		StudentManagementSystem project1 = new StudentManagementSystem();
+		project1.start();
+
+	}
+
+	public void start()
+	{
+
+		int selection = 0;
+		Scanner keyboard = new Scanner(System.in);
+	
+		System.out.println("Welcome to the Student Management System");
+	
+
+		//Maybe add a loop here
+		while(selection != 3)
+		{
+			System.out.println("\nPlease select your menu option: ");
+			System.out.println("\nPress 1 to create new student records");
+			System.out.println("\nPress 2 load student records from a file");
+			System.out.println("\nPress 3 to exit the SMS system");
+			System.out.print("\nYour selection: ");
+
+			try
+			{
+				selection = keyboard.nextInt();
+				if (selection < 1 || selection > 3)
+					throw new IllegalArgumentException("Menu choice out of range");
+			}
+
+			catch (InputMismatchException e)
+			{
+				System.out.println("Invalid input! Please enter a valid input");
+				keyboard.nextLine();
+				continue;
+			}
+			
+			catch (IllegalArgumentException e)
+			{
+				System.out.println(e.getMessage());
+				continue;
+			}
+			
+			switch(selection)
+			{
+				case 1: 
+				{
+					newRecord();
+					break;
+				}
+
+				case 2:
+				{
+					loadRecord();
+				}
+			}
+	
+			System.out.println("Your selection is: " + selection);
+		}
+	}
+
+	//This creates a new student record
+
+	public void newRecord()
+	{
+		System.out.println("New student record will be created");
+		
+		int numberOfStudents = 0;
+		Scanner keyboard = new Scanner(System.in);
+
+		//add try block here
+		System.out.println("How many students will be added to this record?");
+		numberOfStudents = keyboard.nextInt();
+		keyboard.nextLine();
+
+		Student[] record = new Student[numberOfStudents];
+		
+		for(int i = 0; i < numberOfStudents; i++)
+		{
+
+			//add try blocks here
+			System.out.println("Enter the name of student #" + (i + 1) + ": ");
+			String name = keyboard.nextLine();
+
+			System.out.println("Enter the ID of student #" + (i + 1) + ": ");
+			int id = keyboard.nextInt();	
+			keyboard.nextLine();
+
+			Student student = new Student(id, name);
+
+			System.out.println("How many subjects is the student taking?");
+			int numSubjects = keyboard.nextInt();
+			keyboard.nextLine();
+
+			for(int p = 0; p < numSubjects; p++)
+			{
+				//add try blocks here
+				System.out.println("Enter the name of subject #" + (p + 1) + ": ");
+				String subjectName = keyboard.nextLine();
+
+				System.out.println("Enter the grade of subject #" + (p + 1) + ": ");
+				int grade = keyboard.nextInt();
+				keyboard.nextLine();
+
+				student.addSubject(new Subject(subjectName, grade));
+			}
+
+			record[i] = student;
+		}
+
+		System.out.println("New student records have be created successfully!");
+
+		submenu(record);
+		
+	}
+
+	public void loadRecord()
+	{
+		System.out.println("Loading student record");
+		//Load student record here
+
+	}
+
+	private void submenu(Student[] record)
+	{
+		int selection = 0;
+		Scanner keyboard = new Scanner(System.in);
+		
+		while(selection != 6)
+		{
+			System.out.println("\nWould you like to: \n1. Save\n2. Add student\n3. Remove student\n4. Edit student\n5. View students\n6. Return to main menu");
+	
+			selection = keyboard.nextInt();
+			keyboard.nextLine();
+
+			switch(selection)
+			{
+				case 1:
+				{
+					saveFile(record);
+					break;
+				}
+			
+				case 2:
+				{
+					record = addStudent(record);
+					break;
+				}
+
+				case 3:
+				{
+					record = removeStudent(record);
+					break;
+				}
+		
+				case 4:
+				{
+					editStudent(record);
+					break;
+				}
+
+				case 5:
+				{
+					for(int i = 0; i < record.length; i++)
+					{
+						System.out.println("Student #" + (i + 1) + ":\n" + record[i]);
+					}
+				}
+				
+				case 6:
+				{
+					//return to main menu;
+					break;
+				}
+			}		
+		}
+	}
+
+	private void saveFile(Student[] record)
+	{
+		//savefile
+	}
+	
+	private Student[] addStudent(Student[] record)
+	{
+		Scanner keyboard = new Scanner(System.in);
+
+		System.out.println("Adding a new student:");
+
+		System.out.println("Enter new student name: ");
+		String name = keyboard.nextLine();
+
+		System.out.println("Enter student ID: ");
+		int id = keyboard.nextInt();
+		keyboard.nextLine();
+
+		Student newStudent = new Student(id, name);
+
+		System.out.println("How many subjects does this student have? ");
+		int numSubjects = keyboard.nextInt();
+		keyboard.nextLine();
+
+		for(int i = 0; i < numSubjects;i++)
+		{
+			System.out.println("Enter the name of subject #" + (i + 1) + ": ");
+			String subjectName = keyboard.nextLine();
+
+			System.out.println("Enter the grade of subject #" + (i + 1) + ": ");
+			int grade = keyboard.nextInt();
+			keyboard.nextLine();
+
+			newStudent.addSubject(new Subject(subjectName, grade));
+		}
+
+		Student[] newRecord = new Student[record.length + 1];
+
+		for (int i = 0; i < record.length; i++)
+			newRecord[i] = record[i];
+		
+		newRecord[record.length] = newStudent;
+
+		System.out.println("The new student has been added!");
+
+		return newRecord;
+	}
+
+	private Student[] removeStudent(Student[] record)
+	{
+		Scanner keyboard = new Scanner(System.in);
+	
+		System.out.println("Which student would you like to remove?");
+
+		for (int i = 0; i < record.length; i++)
+		{
+			System.out.println((i + 1) + ". " + record[i].getName());
+		}
+
+		System.out.println("Selection: ");
+		int selection = keyboard.nextInt();
+		keyboard.nextLine();
+
+		if (selection < 1 || selection > record.length)
+		{
+			System.out.println("Invalid selection. No student removed.");
+			return record;
+		}
+	
+		Student[] newRecord = new Student[record.length - 1];
+
+		int index = 0;
+		for (int i = 0; i < record.length; i++)
+		{
+			if(i != selection - 1)
+			{
+				newRecord[index] = record[i];
+				index++;
+			}
+		}
+		
+		System.out.println("The student has been removed!");
+
+		return newRecord;
+	}
+
+	private void editStudent(Student[] record)
+	{
+		Scanner keyboard = new Scanner(System.in);
+		int selection = 0;
+		int selection2 = 0;
+
+		System.out.println("Enter the number of which student you would like to edit: "); 
+		
+		for(int i = 0; i < record.length; i++)
+		{
+			System.out.println("Student #" + (i + 1) + " is " + record[i].getName());
+		}
+
+		System.out.println("Selection: ");
+		selection = keyboard.nextInt();
+		keyboard.nextLine();
+
+		Student chosen = record[selection - 1];
+
+
+		//need to add an edit where we can add or remove subjects
+		System.out.println("Which information needs to be edited?\n1. Name\n2. ID\n3. Subject Name\n4. Grade\nSelection: ");
+		selection2 = keyboard.nextInt();
+		keyboard.nextLine();
+
+		switch(selection2)
+		{
+			case 1:
+			{
+				System.out.println("Enter the new name: ");
+				String newName = keyboard.nextLine();
+				chosen.setName(newName);
+				break;
+			}
+		
+			case 2:
+			{
+				System.out.println("Enter the new ID: ");
+				int newID = keyboard.nextInt();
+				keyboard.nextLine();
+				chosen.setID(newID);
+				break;
+			}
+
+			case 3:
+			{
+				System.out.println("Select subject");
+
+				for(int i = 0; i < chosen.getSubjectCount(); i++)
+				{
+					System.out.println((i + 1) + ". " + chosen.getSubject(i).getName());
+				}
+				int selection3 = keyboard.nextInt();
+				keyboard.nextLine();
+
+				System.out.println("What is the name of the new subject: ");
+				String newSubjectName = keyboard.nextLine();
+				chosen.getSubject(selection3 - 1).setName(newSubjectName);
+				break;
+			}
+
+			case 4:
+			{
+				System.out.println("Select the subject that needs a grade change");
+				for(int i = 0; i < chosen.getSubjectCount(); i++)
+				{
+					System.out.println((i + 1) + ". " + chosen.getSubject(i).getName());
+				}
+				int selection3 = keyboard.nextInt();
+				keyboard.nextLine();
+
+				System.out.println("What is the new grade: ");
+				int newGrade = keyboard.nextInt();
+				keyboard.nextLine();
+				chosen.getSubject(selection3 - 1).setGrade(newGrade);
+				break;
+
+
+			}
+			
+		}
+
+		
+	}
+
+		
+}
